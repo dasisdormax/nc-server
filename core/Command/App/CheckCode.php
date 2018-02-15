@@ -81,6 +81,16 @@ class CheckCode extends Command implements CompletionAwareInterface  {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
+		try {
+			return $this->execute2($input, $output);
+		} catch (\Exception $e) {
+			var_dump(json_encode($e->getTrace(), JSON_PRETTY_PRINT));
+			echo json_encode($e->getTrace(), JSON_PRETTY_PRINT);
+			var_dump($e);
+			echo $e;
+		}
+	}
+	protected function execute2(InputInterface $input, OutputInterface $output) {
 		$appId = $input->getArgument('app-id');
 
 		$checkList = new EmptyCheck();

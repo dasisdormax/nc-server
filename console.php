@@ -37,7 +37,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 define('OC_CONSOLE', 1);
 
-function exceptionHandler(Error $exception) {
+function exceptionHandler($exception) {
 
 	echo "An unhandled exception has been thrown:" . PHP_EOL;
 	echo $exception;

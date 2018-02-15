@@ -84,10 +84,9 @@ class CheckCode extends Command implements CompletionAwareInterface  {
 		try {
 			return $this->execute2($input, $output);
 		} catch (\Exception $e) {
-			var_dump(json_encode($e->getTrace(), JSON_PRETTY_PRINT));
-			echo json_encode($e->getTrace(), JSON_PRETTY_PRINT);
-			var_dump($e);
-			echo $e;
+			$output->writeln(json_encode($e->getTrace(), JSON_PRETTY_PRINT));
+			$output->writeln($e->getMessage());
+			$output->writeln($e->getTraceAsString());
 		}
 	}
 	protected function execute2(InputInterface $input, OutputInterface $output) {

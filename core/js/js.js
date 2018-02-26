@@ -1762,27 +1762,26 @@ $.fn.filterAttr = function(attr_name, attr_value) {
  * @return {string}
  */
 function humanFileSize(size, skipSmallSizes) {
-	var humanList = ['B', 'KB', 'MB', 'GB', 'TB'];
+	var unitList = ['B', 'KiB', 'MiB', 'GiB', 'TiB'];
 	// Calculate Log with base 1024: size = 1024 ** order
 	var order = size > 0 ? Math.floor(Math.log(size) / Math.log(1024)) : 0;
 	// Stay in range of the byte sizes that are defined
-	order = Math.min(humanList.length - 1, order);
-	var readableFormat = humanList[order];
-	var relativeSize = (size / Math.pow(1024, order)).toFixed(1);
+	order = Math.min(unitList.length - 1, order);
+	// Handle skipSmallSizes
 	if(skipSmallSizes === true && order === 0) {
-		if(relativeSize !== "0.0"){
-			return '< 1 KB';
+		if(size > 0){
+			return t('core', '< 1 KiB');
 		} else {
-			return '0 KB';
+			return t('core', '{size} KiB', {size: (0).toLocaleString(OC.getLocale())});
 		}
 	}
-	if(order < 2){
-		relativeSize = parseFloat(relativeSize).toFixed(0);
-	}
-	else if(relativeSize.substr(relativeSize.length-2,2)==='.0'){
-		relativeSize=relativeSize.substr(0,relativeSize.length-2);
-	}
-	return relativeSize + ' ' + readableFormat;
+	var unit = unitList[order];
+	var relativeSize = size / Math.pow(1024, order);
+	var digits = Math.min(order + 1, 3);
+	digits = Math.max(digits, 1 + Math.floor(Math.log(relativeSize) / Math.log(10)))
+	var options = {minimumSignificantDigits: digits, maximumSignificantDigits: digits};
+	var localeSize = relativeSize.toLocaleString(OC.getLocale(), options);
+	return t('core', '{size} ' + unit, {size: localeSize});
 }
 
 /**
